@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="pt-BR" x-data="app()" x-init="init()" :class="{ 'dark': escuro }">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Newsletter PS Júnior | Demo de design</title>
+<meta name="description" content="Demonstração do design da newsletter da PS Júnior Consultoria.">
+<link rel="icon" type="image/png" href="img/logo-ps.png">
+<link rel="apple-touch-icon" href="img/logo-ps.png">
+
+<!-- Aplica o tema antes de carregar, para não piscar -->
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('ps-tema'); } catch (e) {}
+    var escuro = t ? t === 'escuro' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (escuro) document.documentElement.classList.add('dark');
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Tailwind (com container queries) -->
+<script src="https://cdn.tailwindcss.com?plugins=container-queries"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+        colors: {
+          ps: {
+            azul: '#00AFE3', claro: '#53CCF5', escuro: '#26323D', texto: '#007FA6',
+            fundo: '#EEF3F6', suave: '#F2FAFD', linha: '#DCE6EC', cinza: '#4A5A68',
+            noite: '#141C22', noite2: '#1C262E', noite3: '#2C3A46'
+          }
+        }
+      }
+    }
+  };
+</script>
+
+<!-- Alpine.js (o plugin de recolher precisa vir antes do Alpine) -->
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+
+<style>
+  [x-cloak]{display:none !important}
+  body{-webkit-font-smoothing:antialiased}
+  .nl{--acento:#00AFE3}
+  .acento-bg{background-color:var(--acento)}
+  .acento-tx{color:var(--acento)}
+  .ic{width:1.25rem;height:1.25rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+
+<body class="font-sans bg-ps-fundo text-ps-escuro dark:bg-ps-noite dark:text-slate-100 transition-colors">
+
+<!-- ===== Barra superior ===== -->
+<header class="bg-ps-escuro text-white dark:bg-black/40 dark:border-b dark:border-ps-noite3">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between gap-3">
+    <div class="leading-tight">
+      <p class="font-extrabold text-base sm:text-lg tracking-wide">PS JÚNIOR</p>
+      <p class="text-[11px] sm:text-xs font-medium tracking-wider text-slate-300">CONSULTORIA</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button type="button" @click="alternarTema()"
+        class="h-11 w-11 rounded-xl flex items-center justify-center border border-white/20 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ps-claro"
+        :aria-label="escuro ? 'Ativar modo claro' : 'Ativar modo escuro'">
+        <svg x-show="escuro" x-cloak class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg x-show="!escuro" class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Conteúdo ===== -->
+<main class="max-w-6xl mx-auto px-5 sm:px-6 py-10 lg:py-14 grid gap-10 lg:gap-12 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] items-start">
+
+  <!-- Painel lateral -->
+  <aside class="flex flex-col gap-6 lg:sticky lg:top-6">
+    <div>
+      <span class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-ps-linha bg-white dark:bg-ps-noite2 dark:border-ps-noite3 text-xs font-bold tracking-[1.5px] text-ps-texto dark:text-ps-claro">
+        <span class="w-1.5 h-1.5 rounded-full bg-ps-azul"></span>DEMO DE DESIGN
+      </span>
+      <h1 class="mt-6 text-[40px] sm:text-5xl font-black leading-[1.05] tracking-tight">
+        Newsletter da PS&nbsp;Júnior<span class="text-ps-azul">.</span>
+      </h1>
+      <p class="mt-6 text-[15px] leading-8 text-ps-cinza dark:text-slate-300">
+        Proposta visual da newsletter da PS. Esta página serve apenas para apresentar o layout: os textos entre colchetes ainda precisam ser definidos com a diretoria de Marketing.
+      </p>
+    </div>
+
+    <div class="grid gap-4">
+      <!-- Estrutura -->
+      <section class="bg-white dark:bg-ps-noite2 border border-ps-linha dark:border-ps-noite3 rounded-2xl p-6 flex flex-col gap-5" aria-labelledby="t-est">
+        <h2 id="t-est" class="flex items-center gap-3 text-[17px] font-bold">
+          <svg class="ic text-ps-cinza dark:text-slate-400" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6h11M10 12h11M10 18h11M4 6h1v4M4 10h2M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+          Estrutura da edição
+        </h2>
+        <ol class="flex flex-col gap-4">
+          <template x-for="(item, i) in estrutura" :key="i">
+            <li class="flex gap-4 items-center text-[15px]">
+              <span class="shrink-0 w-8 h-8 rounded-lg bg-ps-suave dark:bg-ps-noite3 text-ps-texto dark:text-ps-claro text-xs font-bold inline-flex items-center justify-center" x-text="String(i + 1).padStart(2, '0')"></span>
+              <span class="text-ps-cinza dark:text-slate-300" x-text="item"></span>
+            </li>
+          </template>
+        </ol>
+      </section>
+    </div>
+
+    <!-- Campos em aberto -->
+    <div x-data="{ aberto: false }" class="rounded-2xl border border-amber-300/70 bg-amber-50 text-amber-900 dark:bg-amber-400/10 dark:border-amber-400/30 dark:text-amber-200">
+      <button type="button" @click="aberto = !aberto" :aria-expanded="aberto.toString()"
+        class="w-full min-h-[56px] px-5 py-4 flex items-center gap-3 text-[15px] font-semibold text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-2xl">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+        <span class="flex-1">Campos em aberto</span>
+        <svg class="ic transition-transform" :class="aberto && 'rotate-180'" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <ul x-show="aberto" x-collapse x-cloak class="px-5 pb-5 pl-14 text-sm leading-relaxed list-disc">
+        <template x-for="c in pendentes" :key="c"><li x-text="c"></li></template>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- ===== Pré-visualização ===== -->
+  <section class="flex flex-col gap-4 min-w-0" aria-label="Pré-visualização da newsletter">
+    <p class="flex items-center gap-2 text-xs font-bold tracking-[1.5px] text-ps-cinza dark:text-slate-400">
+      <span class="w-1.5 h-1.5 rounded-full bg-ps-azul"></span>PRÉ-VISUALIZAÇÃO
+    </p>
+
+    <div class="-mx-5 sm:mx-auto sm:w-full bg-white dark:bg-ps-noite2 sm:rounded-2xl overflow-hidden border-y sm:border border-ps-linha dark:border-ps-noite3 shadow-[0_12px_40px_rgba(38,50,61,.10)] dark:shadow-none sm:max-w-[680px]">
+
+      <!-- Barra do cliente de e-mail -->
+      <div class="relative flex items-center justify-center px-5 py-4 bg-ps-suave dark:bg-ps-noite border-b border-ps-linha dark:border-ps-noite3">
+        <div class="absolute left-5 flex gap-2" aria-hidden="true">
+          <span class="w-3 h-3 rounded-full bg-[#E8716B]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#EFB93F]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#5DBE6E]"></span>
+        </div>
+        <span class="inline-flex items-center gap-2 text-sm text-ps-cinza dark:text-slate-400">
+          <svg class="ic !w-4 !h-4" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>E-mail
+        </span>
+      </div>
+      <dl class="px-5 py-5 grid grid-cols-[auto_minmax(0,1fr)] gap-x-6 gap-y-3 text-sm border-b border-ps-linha dark:border-ps-noite3">
+        <dt class="text-ps-cinza dark:text-slate-400">De:</dt>
+        <dd class="truncate"><b>PS Júnior Consultoria</b> <span class="text-ps-cinza dark:text-slate-400">&lt;contato@psjunior.com&gt;</span></dd>
+        <dt class="text-ps-cinza dark:text-slate-400">Assunto:</dt>
+        <dd class="font-semibold">Tire seus planos do papel com o 5W2H</dd>
+      </dl>
+
+      <!-- ===== A NEWSLETTER ===== -->
+      <article class="nl @container w-full bg-white dark:bg-ps-noite2">
+
+        <!-- Cabeçalho -->
+        <header class="bg-ps-escuro dark:bg-black/30 px-5 @lg:px-10 pt-7 pb-10 flex flex-col gap-8">
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-bold tracking-[1.5px] text-ps-claro">NEWSLETTER</span>
+            <img src="img/logo-ps.png" alt="Logo da PS Júnior" width="133" height="180" class="h-9 @lg:h-10 w-auto">
+          </div>
+          <div>
+            <p class="text-sm text-slate-300">Edição [nº] · [mês/ano]</p>
+            <h2 class="mt-4 text-[30px] @lg:text-[38px] leading-[1.12] font-black text-white">
+              Tire seus planos do papel com o <span class="acento-tx">5W2H</span>
+            </h2>
+            <p class="mt-5 text-[15px] leading-8 text-slate-300">Uma ferramenta simples para transformar ideias em ações claras, com responsáveis, prazos e custos definidos.</p>
+          </div>
+        </header>
+        <div class="h-1.5 acento-bg"></div>
+
+        <!-- Abertura -->
+        <section class="px-5 @lg:px-10 py-10 flex flex-col gap-5">
+          <h3 class="text-2xl font-extrabold">Olá, [nome do leitor]!</h3>
+          <p class="text-[15px] leading-8 text-ps-cinza dark:text-slate-300">Nesta edição, trazemos uma ferramenta que usamos no dia a dia da PS Júnior e que pode ajudar o seu negócio a organizar qualquer projeto, do lançamento de um produto a uma campanha de marketing.</p>
+        </section>
+
+        <!-- Dica de gestão -->
+        <section class="bg-ps-suave dark:bg-ps-noite border-y border-ps-linha dark:border-ps-noite3 px-5 @lg:px-10 py-10 flex flex-col gap-6">
+          <div>
+            <p class="text-xs font-bold tracking-[1.5px] text-ps-texto dark:text-ps-claro">DICA DE GESTÃO</p>
+            <h3 class="mt-4 text-[28px] @lg:text-[32px] font-extrabold leading-tight">As 7 perguntas de um bom plano de ação</h3>
+          </div>
+          <div class="grid grid-cols-1 @md:grid-cols-2 gap-3">
+            <template x-for="p in w2h" :key="p.en">
+              <div class="bg-white dark:bg-ps-noite2 border border-ps-linha dark:border-ps-noite3 rounded-2xl p-5 flex items-center gap-5">
+                <span class="w-12 h-12 rounded-xl bg-ps-suave dark:bg-ps-noite3 text-ps-texto dark:text-ps-claro inline-flex items-center justify-center shrink-0">
+                  <svg class="ic !w-6 !h-6" viewBox="0 0 24 24" aria-hidden="true" x-html="icones[p.icone]"></svg>
+                </span>
+                <div>
+                  <p class="text-sm font-extrabold text-ps-texto dark:text-ps-claro" x-text="p.en"></p>
+                  <p class="mt-1 text-[15px]" x-text="p.pt"></p>
+                </div>
+              </div>
+            </template>
+            <div class="@md:col-span-2 bg-ps-escuro dark:bg-black/40 rounded-2xl p-5 flex items-center gap-5">
+              <span class="w-12 h-12 rounded-xl bg-white/10 text-ps-claro inline-flex items-center justify-center shrink-0">
+                <svg class="ic !w-6 !h-6" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18M7 6h1v4M16.71 13.88l.7.71-2.82 2.82"/></svg>
+              </span>
+              <div>
+                <p class="text-sm font-extrabold text-ps-claro">HOW MUCH</p>
+                <p class="mt-1 text-[15px] text-white">Quanto vai custar?</p>
+              </div>
+            </div>
+          </div>
+          <p class="text-[15px] leading-8 text-ps-cinza dark:text-slate-300">Respondendo às sete perguntas, cada ação ganha objetivo, responsável, prazo e orçamento. Fica muito mais fácil acompanhar o que está andando e o que está parado.</p>
+        </section>
+
+        <!-- Áreas de atuação -->
+        <section class="px-5 @lg:px-10 py-10 flex flex-col gap-6 border-b border-ps-linha dark:border-ps-noite3">
+          <div>
+            <p class="text-xs font-bold tracking-[1.5px] text-ps-texto dark:text-ps-claro">COMO A PS PODE AJUDAR</p>
+            <h3 class="mt-4 text-[28px] @lg:text-[32px] font-extrabold leading-tight">Nossas áreas de atuação</h3>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <template x-for="a in areas" :key="a">
+              <span class="text-[15px] font-medium px-5 py-3 rounded-full border-[1.5px] border-ps-claro text-ps-texto dark:text-ps-claro" x-text="a"></span>
+            </template>
+          </div>
+        </section>
+
+        <!-- Novidades -->
+        <section class="px-5 @lg:px-10 py-10 flex flex-col gap-5">
+          <p class="text-xs font-bold tracking-[1.5px] text-ps-texto dark:text-ps-claro">NOVIDADES DA PS</p>
+          <img src="img/equipe-ps.jpg" alt="Equipe da PS Júnior reunida em uma sala de reuniões" width="1080" height="608" loading="lazy"
+               class="w-full aspect-[16/9] object-cover rounded-2xl">
+          <h4 class="text-[28px] font-extrabold leading-tight">[Título da novidade]</h4>
+          <p class="text-[15px] leading-8 text-ps-cinza dark:text-slate-300">[Texto curto sobre um projeto concluído, evento ou conquista da PS. Citar cliente apenas com autorização.]</p>
+          <a href="#" @click.prevent class="text-[15px] font-semibold text-ps-texto dark:text-ps-claro hover:underline w-fit">Saiba mais →</a>
+        </section>
+
+        <!-- Chamada para ação -->
+        <section class="mx-5 @lg:mx-10 mb-12 bg-ps-suave dark:bg-ps-noite border border-ps-linha dark:border-ps-noite3 rounded-2xl px-6 py-10 flex flex-col items-center gap-6 text-center">
+          <svg class="ic !w-12 !h-12 text-ps-texto dark:text-ps-claro" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <h3 class="text-2xl @lg:text-[28px] font-extrabold leading-tight">Quer organizar os próximos passos do seu negócio?</h3>
+          <p class="text-base leading-8 text-ps-cinza dark:text-slate-300">Converse com a nossa equipe e descubra como podemos ajudar.</p>
+          <a href="#" @click.prevent class="acento-bg text-ps-escuro font-bold text-[17px] px-10 py-4 rounded-full inline-flex items-center gap-3 hover:brightness-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ps-escuro dark:focus-visible:ring-white">
+            Fale com a PS
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <p class="text-sm text-ps-cinza dark:text-slate-400">[link do formulário ou WhatsApp]</p>
+        </section>
+
+        <!-- Rodapé -->
+        <footer class="bg-ps-escuro dark:bg-black/40 px-5 @lg:px-10 pt-12 pb-10 flex flex-col items-center text-center">
+          <p class="text-lg font-extrabold text-white">PS JÚNIOR CONSULTORIA</p>
+          <p class="mt-3 text-sm text-slate-300">Empresa júnior da UFRGS</p>
+
+          <address class="not-italic mt-8 flex flex-col gap-2.5 text-[15px] text-slate-300">
+            <span>Rua Washington Luiz, 855</span>
+            <span>Escola de Administração, UFRGS</span>
+            <span>Porto Alegre, RS, Brasil, CEP 90010-460</span>
+            <a href="tel:+555133083808" class="hover:text-white">+55 51 3308.3808</a>
+            <a href="mailto:contato@psjunior.com" class="hover:text-white">contato@psjunior.com</a>
+            <a href="https://www.psjuniorconsultoria.com/" target="_blank" rel="noopener" class="hover:text-white">psjuniorconsultoria.com</a>
+          </address>
+
+          <nav class="mt-8 flex flex-wrap justify-center gap-4 text-ps-claro" aria-label="Redes e contatos da PS">
+            <a href="https://www.instagram.com/ps.junior/" target="_blank" rel="noopener" aria-label="Instagram da PS Júnior" class="w-12 h-12 rounded-xl inline-flex items-center justify-center hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ps-claro">
+              <svg class="ic !w-7 !h-7" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/ps-j-nior/" target="_blank" rel="noopener" aria-label="LinkedIn da PS Júnior" class="w-12 h-12 rounded-xl inline-flex items-center justify-center hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ps-claro">
+              <svg class="ic !w-7 !h-7" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.psjuniorconsultoria.com/" target="_blank" rel="noopener" aria-label="Site da PS Júnior" class="w-12 h-12 rounded-xl inline-flex items-center justify-center hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ps-claro">
+              <svg class="ic !w-7 !h-7" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg>
+            </a>
+            <a href="mailto:contato@psjunior.com" aria-label="Enviar e-mail para a PS Júnior" class="w-12 h-12 rounded-xl inline-flex items-center justify-center hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ps-claro">
+              <svg class="ic !w-7 !h-7" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </a>
+            <a href="tel:+555133083808" aria-label="Ligar para a PS Júnior" class="w-12 h-12 rounded-xl inline-flex items-center justify-center hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ps-claro">
+              <svg class="ic !w-7 !h-7" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </a>
+          </nav>
+
+          <div class="w-full h-px bg-white/10 my-8"></div>
+          <p class="text-xs leading-relaxed text-slate-400">Você recebe este e-mail porque se cadastrou para receber conteúdos da PS Júnior.</p>
+          <a href="#" @click.prevent class="mt-5 text-sm underline underline-offset-4 text-ps-claro hover:text-white">Cancelar inscrição</a>
+        </footer>
+      </article>
+    </div>
+
+  </section>
+</main>
+
+<footer class="border-t border-ps-linha dark:border-ps-noite3 text-center py-8 text-sm font-bold tracking-[1.5px] text-ps-cinza dark:text-slate-400">
+  PS JÚNIOR PSEL26/2
+</footer>
+
+<script>
+  function app() {
+    return {
+      escuro: document.documentElement.classList.contains('dark'),
+      estrutura: [
+        'Cabeçalho com tema da edição', 'Abertura personalizada', 'Dica de gestão (5W2H)',
+        'Áreas de atuação da PS', 'Novidades da PS', 'Chamada para ação', 'Rodapé com redes e descadastro (LGPD)'
+      ],
+      icones: {
+        flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/>',
+        ajuda: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>',
+        local: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+        data: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+        pessoa: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+        como: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'
+      },
+      w2h: [
+        { en: 'WHAT',  pt: 'O que será feito?',   icone: 'flag' },
+        { en: 'WHY',   pt: 'Por que será feito?', icone: 'ajuda' },
+        { en: 'WHERE', pt: 'Onde será feito?',    icone: 'local' },
+        { en: 'WHEN',  pt: 'Quando será feito?',  icone: 'data' },
+        { en: 'WHO',   pt: 'Quem fará?',          icone: 'pessoa' },
+        { en: 'HOW',   pt: 'Como será feito?',    icone: 'como' }
+      ],
+      areas: [
+        'Planejamento Estratégico', 'Marketing', 'Plano Comercial', 'Finanças',
+        'Processos', 'Pesquisa', 'Recursos Humanos', 'Viabilidade e Novos Negócios'
+      ],
+      pendentes: [
+        'Número e data da edição',
+        'Nome do leitor',
+        'Título e texto da novidade',
+        'Link do formulário ou WhatsApp'
+      ],
+      init() {
+        var self = this;
+        var mq = window.matchMedia('(prefers-color-scheme: dark)');
+        if (mq.addEventListener) mq.addEventListener('change', function (e) {
+          var salvo = null;
+          try { salvo = localStorage.getItem('ps-tema'); } catch (err) {}
+          if (!salvo) self.escuro = e.matches;
+        });
+      },
+      alternarTema() {
+        this.escuro = !this.escuro;
+        try { localStorage.setItem('ps-tema', this.escuro ? 'escuro' : 'claro'); } catch (e) {}
+      }
+    };
+  }
+</script>
+</body>
+</html>
